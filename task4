@@ -1,0 +1,127 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+
+record Reservation(int id, String name, String date, int numberOfGuests, String location, int idc) {
+}
+
+
+class ReservationSystem {
+    private final List<Reservation> reservations = new ArrayList<>();
+    private int nextId = 1;
+
+    public Reservation makeReservation(String name, String date, int numberOfGuests, String nameOfGuest, int id,String location,int idc) {
+        Reservation reservation = new Reservation(nextId++, name, date, numberOfGuests,location,idc);
+        reservations.add(reservation);
+        return reservation;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public Reservation getReservationById(int id) {
+        for (Reservation reservation : reservations) {
+            if (reservation.id() == id) {
+                return reservation;
+            }
+        }
+        return null;
+    }
+
+    public boolean cancelReservation(int id) {
+        Reservation reservation = getReservationById(id);
+        if (reservation != null) {
+            reservations.remove(reservation);
+            return true;
+        }
+        return false;
+    }
+
+    public Reservation makeReservation(String name, String date, int numberOfGuests, String location, int idc) {
+        Reservation reservation = new Reservation(nextId++, name, date, numberOfGuests,location,idc);
+        reservations.add(reservation);
+        return reservation;
+    }
+}
+
+
+class ReservationSystemUI {
+    private final ReservationSystem reservationSystem = new ReservationSystem();
+
+    public void start() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("WELCOME TEJA MODERN DAY HOTEL RESERVATION PORTAL");
+            System.out.println("1.MAKE A RESERVATION");
+            System.out.println("2.VIEW ALL RESERVATION");
+            System.out.println("3.CANCEL RESERVATION");
+            System.out.println("4.EXIT");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print(" ENTER YOUR ROOM CONDITION AC/NON AC: ");
+                    String ROOM = scanner.nextLine();
+                    System.out.print("NAME: ");
+                    String name = scanner.nextLine();
+                    System.out.print("DATE: ");
+                    String date = scanner.nextLine();
+
+                    System.out.print("NUMBER OF GUESTS: ");
+                    int numberOfGuests = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("LOCATION/ADDRESS:: ");
+                    String location = scanner.nextLine();
+                    System.out.print("Candidate-id: ");
+                    int idc = scanner.nextInt();
+                    scanner.nextLine();
+
+
+                    Reservation reservation = reservationSystem.makeReservation(name, date, numberOfGuests,location,idc);
+                    System.out.println("Reservation made with ID :" + reservation.id());
+                    System.out.println("ROOM NO:" +reservation.id()+5677);
+                    System.out.println("THANK YOU:YOUR RESERVATION HAS BEEN SUCCESSFULLY COMPLETED:");
+                    System.out.println("NOW IT'S PAYMENT TIME");
+                    System.out.println("1: BANKING CARDS      |   " +"2:UPI    |  "+"3: BY-CASH       |  " +"4:INTERNET BANKING      |  "+"5:MOBILE WALLET     |   "+"6:DEBIT/CREDIT");
+                    System.out.println("ENTER YOUR  PAYMENT OPTION");
+                    String PAYMENT= scanner.nextLine();
+                    System.out.println("GUEST "+reservation.id()+" CHOOSE PAYMENT OPTION "+PAYMENT);
+                    System.out.println("PAYMENT SUCCESSFULLY COMPLETED");
+                    System.out.println("NOW ENJOY YOUR JOURNEY IN TEJA MODERN DAY  HOTEL THANK YOU:");
+                    break;
+                case 2:
+                    System.out.println("Reservations:");
+                    for (Reservation r : reservationSystem.getReservations()) {
+                        System.out.println("RESERVATION NUMBER:"+r.id()+" | " + "NAME:" + r.name()+" | " + "RESERVATION-DATE:" + r.date()+" | " + "NUMBER OF GUEST:" + r.numberOfGuests()+" | "+"LOCATION/ADDRESS:"+r.location()+" | "+"CANDIDATE-ID:"+r.idc());
+                    }
+                    break;
+                case 3:
+                    System.out.print("Reservation ID to cancel: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (reservationSystem.cancelReservation(id)) {
+                        System.out.println("Reservation canceled");
+                    } else {
+                        System.out.println("Reservation not found");
+                    }
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Invalid choice");
+            }
+
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        ReservationSystemUI obj = new ReservationSystemUI();
+        obj.start();}
+}
