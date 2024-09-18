@@ -1,0 +1,124 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) {
+        double[][] studentScores = {
+                {90, 88, 78, 80, 85},
+                {85, 64, 65, 95, 65},
+                {75, 73, 87, 85, 90},
+                {95, 72, 75, 80, 80},
+                {75, 80, 80, 68, 70},
+
+        };
+
+        String[] studentNames = {
+                "vishesh kumar prajapati",
+                "awanish kumar",
+                "priyanshu singh",
+                "anjali srivastawa",
+                "shivanshu rawat",
+
+        };
+        List<List<Double>> assignmentScores = colsToRows(studentScores);
+
+        int i = 0;
+        for(double[] score : studentScores) {
+            System.out.println(studentNames[i]);
+            System.out.println("Highest score = " + max(score));
+            System.out.println("Lowest score = " + min(score));
+            System.out.println("Mean = " + mean(score) + " Grade:" + gradeLetter(mean(score)));
+            System.out.println("Mean (lowest dropped) = " + meanLowDrop(score));
+            System.out.println("-------------------------------------");
+            i++;
+        }
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+
+
+        int j = 1;
+        for (List<Double> aScore : assignmentScores) {
+
+            double[] row = aScore.stream().mapToDouble(Double::doubleValue).toArray();
+            System.out.println("EXAMINATION: " + j);
+            System.out.println("Highest score = " + max(row));
+            System.out.println("Lowest score = " + min(row));
+            System.out.println("Mean = " + mean(row) + " Grade:" + gradeLetter(mean(row)));
+            System.out.println("Mean (lowest dropped) = " + meanLowDrop(row));
+            System.out.println("-------------------------------------");
+            j++;
+        }
+    }
+
+
+    public static double max(double[] numbers) {
+        double result = numbers[0];
+        for (double number : numbers) {
+            if (number > result) {
+                result = number;
+            }
+        }
+        return result;
+    }
+
+
+    public static double min(double[] numbers) {
+        double result = numbers[0];
+        for (double number : numbers) {
+            if (number < result) {
+                result = number;
+            }
+        }
+        return result;
+    }
+
+
+    public static double mean(double[] numbers) {
+        double sum = 0;
+        for (double number : numbers) {
+            sum += number;
+        }
+        return sum / numbers.length;
+    }
+
+    public static double meanLowDrop(double[] numbers) {
+        double lowestGrade = min(numbers);
+        double sum = 0;
+        for (double number : numbers) {
+            sum += number;
+        }
+        return (sum - lowestGrade) / (numbers.length - 1);
+    }
+
+
+    public static char gradeLetter(double mean) {
+        char result;
+        if (mean >= 90) {
+            result = 'A';
+        } else if (mean >= 80) {
+            result = 'B';
+        } else if (mean >= 70) {
+            result = 'C';
+        } else if (mean >= 65) {
+            result = 'D';
+        } else {
+            result = 'F';
+        }
+        return result;
+    }
+
+
+    public static List<List<Double>> colsToRows(double[][] studentGrades) {
+        List<List<Double>> rows = new ArrayList<>();
+        for (int i = 0; i < studentGrades.length; i++) {
+            List<Double> temp = new ArrayList<>();
+            for (double[] studentGrade : studentGrades) {
+                temp.add(studentGrade[i]);
+            }
+            rows.add(temp);
+        }
+        return rows;
+    }
+}
